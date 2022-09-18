@@ -12,7 +12,7 @@ namespace SelfieAWookie.API.UI.Controllers
     public class SelfieController : ControllerBase
     {
         private readonly ISelfieRepository repository = null;
-        public SelfieController(ISelfieRepository slf )
+        public SelfieController(ISelfieRepository slf)
         {
             repository = slf;
         }
@@ -30,6 +30,28 @@ namespace SelfieAWookie.API.UI.Controllers
 
 
             return this.Ok(res);
+        }
+
+        [HttpPost]
+        public IActionResult AddOne(SelfieDTO item)
+        {
+            IActionResult res = this.BadRequest();
+
+            Selfie addedSelfie = this.repository.AddOne(new Selfie()
+            {
+                ImagePath = item.ImagePath,
+                Title = item.Title
+            });
+
+            this.repository.UnitOfWork.SaveChanges();
+            if(addedSelfie != null)
+            {
+                item.Id = addedSelfie.Id;
+                res = this.Ok(item);
+            }
+            
+            
+            return res;
         }
     }
 }

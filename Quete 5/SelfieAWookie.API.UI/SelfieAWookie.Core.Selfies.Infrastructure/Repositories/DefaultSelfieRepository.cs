@@ -20,5 +20,10 @@ namespace SelfieAWookie.Core.Selfies.Infrastructures.Repositories
         {
             return context.Selfies.Include(item => item.Wookie).ToList();
         }
+
+        public Selfie AddOne(Selfie item)
+        {
+            return this.context.Selfies.Add(item).Entity;
+        }
     }
 }
